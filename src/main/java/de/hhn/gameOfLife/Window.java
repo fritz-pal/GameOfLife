@@ -4,62 +4,32 @@ import javax.swing.*;
 import java.awt.*;
 
 public class Window extends JFrame {
-    GamePanel gamePanel = new GamePanel();
-    private GameThread gameThread = null;
-    private int updateRate = 100;
+    JMenuBar menu = new JMenuBar();
+    JDesktopPane desktopPane = new JDesktopPane();
 
     public Window() {
-        this.setSize(1000, 1000);
-        this.setPreferredSize(new Dimension(1000, 1000));
-        this.pack();
-        this.setLayout(null);
-        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        this.add(gamePanel);
+        super("Game of Life");
+        this.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setLocationRelativeTo(null);
+        this.setIconImage(new ImageIcon("src/main/resources/icon.png").getImage());
+        JMenu[] menus = {new JMenu("File"), new JMenu("Mode"), new JMenu("View"), new JMenu("Help")};
 
-
-        JButton startButton = new JButton("Start/Stop");
-        startButton.setBounds(800, 0, 100, 50);
-        startButton.addActionListener(e -> {
-            if (gameThread == null) {
-                gameThread = new GameThread(gamePanel, updateRate);
-                gameThread.start();
-            } else {
-                gameThread.dispose();
-                gameThread = null;
-            }
+        JMenuItem createWindow = new JMenuItem("New Window");
+        createWindow.addActionListener(e -> {
+            GOLWindow frame = new GOLWindow(100, 100);
+            desktopPane.add(frame);
         });
-        this.add(startButton);
+        menus[0].add(createWindow);
+        for(JMenu m : menus) {
+            menu.add(m);
+        }
+        this.setJMenuBar(menu);
 
-        JButton stepButton = new JButton("Step");
-        stepButton.setBounds(800, 50, 100, 50);
-        stepButton.addActionListener(e -> gamePanel.update());
-        this.add(stepButton);
+        desktopPane.setBackground(Color.BLUE);
 
-        JButton stepBackButton = new JButton("Step Back");
-        stepBackButton.setBounds(800, 100, 100, 50);
-        stepBackButton.addActionListener(e -> gamePanel.loadLastStep());
-        this.add(stepBackButton);
-
-        JButton clearButton = new JButton("Clear");
-        clearButton.setBounds(800, 150, 100, 50);
-        clearButton.addActionListener(e -> gamePanel.clear());
-        this.add(clearButton);
-
-        JButton randomButton = new JButton("Randomize");
-        randomButton.setBounds(800, 200, 100, 50);
-        randomButton.addActionListener(e -> gamePanel.randomize());
-        this.add(randomButton);
-
-        JSlider updateRateSlider = new JSlider(1, 1000, 800);
-        updateRateSlider.setBounds(0, 800, 800, 50);
-        updateRateSlider.addChangeListener(e -> {
-            if (gameThread != null) {
-                gameThread.setUpdateRate(updateRateSlider.getValue());
-            }
-            updateRate = updateRateSlider.getValue();
-        });
-        this.add(updateRateSlider);
-
+        this.add(desktopPane, BorderLayout.CENTER);
 
         this.setVisible(true);
     }
