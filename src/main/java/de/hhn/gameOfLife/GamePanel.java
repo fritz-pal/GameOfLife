@@ -3,47 +3,41 @@ package de.hhn.gameOfLife;
 import javax.swing.*;
 import java.awt.*;
 
-public class Window extends JFrame {
-    static int ROWSANDCOLUMNS = 100;
-    private final Cell[][] cells = new Cell[ROWSANDCOLUMNS][ROWSANDCOLUMNS];
+public class GamePanel extends JPanel {
+    static int ROWS = 100;
+    static int COLUMNS = 100;
+    private final Cell[][] cells = new Cell[ROWS][COLUMNS];
 
-    public Window() {
-        super("Game of Life");
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(1016, 1039);
-        this.setLocationRelativeTo(null);
-        this.setResizable(true);
-        this.setLayout(new GridLayout(ROWSANDCOLUMNS, ROWSANDCOLUMNS));
+    private final boolean[][] lastStep = new boolean[ROWS][COLUMNS];
+    private boolean mousePressed = false;
 
-        for (int i = 0; i < ROWSANDCOLUMNS; i++) {
-            for (int j = 0; j < ROWSANDCOLUMNS; j++) {
+    public GamePanel() {
+        this.setBounds(0, 0, COLUMNS * 8, ROWS * 8);
+        this.setPreferredSize(new Dimension(800, 800));
+        this.setLayout(new GridLayout(ROWS, COLUMNS));
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
                 cells[i][j] = new Cell(this);
             }
         }
-
-
-        this.setVisible(true);
-    }
-
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        System.out.println("Width: " + this.getWidth() + " Height: " + this.getHeight());
     }
 
     public void update() {
-        int[][] allNeighbours = new int[ROWSANDCOLUMNS][ROWSANDCOLUMNS];
+        saveLastStep();
 
-        for (int i = 0; i < ROWSANDCOLUMNS; i++) {
-            for (int j = 0; j < ROWSANDCOLUMNS; j++) {
+        int[][] allNeighbours = new int[ROWS][ROWS];
+
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
                 Cell cell = cells[i][j];
                 int neighbours = 0;
                 for (int k = -1; k <= 1; k++) {
                     for (int l = -1; l <= 1; l++) {
-                        int x = (i + k) % ROWSANDCOLUMNS;
-                        if (x < 0) x += ROWSANDCOLUMNS;
-                        int y = (j + l) % ROWSANDCOLUMNS;
-                        if (y < 0) y += ROWSANDCOLUMNS;
+                        int x = (i + k) % ROWS;
+                        if (x < 0) x += ROWS;
+                        int y = (j + l) % COLUMNS;
+                        if (y < 0) y += COLUMNS;
 
                         if (cells[x][y].isAlive()) neighbours++;
                     }
@@ -53,9 +47,49 @@ public class Window extends JFrame {
             }
         }
 
-        for (int i = 0; i < ROWSANDCOLUMNS; i++) {
-            for (int j = 0; j < ROWSANDCOLUMNS; j++) {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
                 cells[i][j].update(allNeighbours[i][j]);
+            }
+        }
+    }
+
+    private void saveLastStep(){
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                lastStep[i][j] = cells[i][j].isAlive();
+            }
+        }
+    }
+
+    public void loadLastStep(){
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                cells[i][j].setAlive(lastStep[i][j]);
+            }
+        }
+    }
+
+    public boolean isMousePressed() {
+        return mousePressed;
+    }
+
+    public void setMousePressed(boolean mousePressed) {
+        this.mousePressed = mousePressed;
+    }
+
+    public void clear() {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                cells[i][j].setAlive(false);
+            }
+        }
+    }
+
+    public void randomize() {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                cells[i][j].setAlive(Math.random() > 0.5);
             }
         }
     }
