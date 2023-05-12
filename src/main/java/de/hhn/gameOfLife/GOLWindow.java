@@ -11,6 +11,8 @@ public class GOLWindow extends JInternalFrame {
     GamePanel gamePanel = new GamePanel();
     private GameThread gameThread = null;
     private int updateRate = 100;
+    private ImageIcon figureImage = null;
+    JLabel imageLabel = new JLabel();
 
     public GOLWindow(int rows, int columns) {
         super("Game of Life", true, true, true, true);
@@ -54,9 +56,12 @@ public class GOLWindow extends JInternalFrame {
 
         JButton importButton = new JButton("Place Glider");
         importButton.setBounds(800, 250, 100, 50);
-        importButton.addActionListener(e -> gamePanel.setFigure(importFigure("glider_gun.png")));
+        importButton.addActionListener(e -> importFigure("glider_gun.png"));
         this.add(importButton);
 
+        imageLabel.setBounds(800, 300, 200, 200);
+        imageLabel.setIcon(figureImage);
+        this.add(imageLabel);
 
         JSlider updateRateSlider = new JSlider(1, 1000, 800);
         updateRateSlider.setBounds(0, 800, 800, 50);
@@ -68,25 +73,29 @@ public class GOLWindow extends JInternalFrame {
         });
         this.add(updateRateSlider);
 
+        importFigure("glider.png");
 
         this.setVisible(true);
     }
 
-    private boolean[][] importFigure(String path) {
+    private void importFigure(String path) {
         File file = new File("src/main/resources/" + path);
         BufferedImage image;
         try {
             image = ImageIO.read(file);
         } catch (IOException e) {
             e.printStackTrace();
-            return new boolean[0][0];
+            return;
         }
+        figureImage = new ImageIcon(image.getScaledInstance(image.getWidth()*4, image.getHeight()*4, Image.SCALE_SMOOTH));
+        imageLabel.setIcon(figureImage);
+
         boolean[][] figure = new boolean[image.getHeight()][image.getWidth()];
         for (int x = 0; x < image.getWidth(); x++) {
             for (int y = 0; y < image.getHeight(); y++) {
                 figure[y][x] = image.getRGB(x, y) == Color.BLACK.getRGB();
             }
         }
-        return figure;
+        gamePanel.setFigure(figure);
     }
 }

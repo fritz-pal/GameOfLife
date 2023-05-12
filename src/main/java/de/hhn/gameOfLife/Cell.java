@@ -6,9 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Cell extends JPanel {
-    private boolean alive;
     private final GamePanel gamePanel;
     private final int x, y;
+    private boolean alive;
 
     public Cell(GamePanel gamePanel, int x, int y) {
         this.x = x;
@@ -24,6 +24,12 @@ public class Cell extends JPanel {
         return alive;
     }
 
+    public void setAlive(boolean alive) {
+        if (this.alive == alive) return;
+        this.alive = alive;
+        setColor();
+    }
+
     public void update(int neighbours) {
         boolean lastState = alive;
         if (!alive) alive = neighbours == 3;
@@ -37,17 +43,11 @@ public class Cell extends JPanel {
         this.setBackground(alive ? Color.GREEN : Color.BLUE);
     }
 
-    public void setAlive(boolean alive) {
-        if(this.alive == alive) return;
-        this.alive = alive;
-        setColor();
-    }
-
     private MouseAdapter mouseListener() {
         return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(gamePanel.isFigureMode()){
+                if (gamePanel.isFigureMode()) {
                     gamePanel.placeFigure(x, y);
                     return;
                 }
@@ -67,6 +67,10 @@ public class Cell extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (gamePanel.isMousePressed()) {
+                    if (gamePanel.isFigureMode()) {
+                        gamePanel.placeFigure(x, y);
+                        return;
+                    }
                     setAlive(true);
                 }
             }

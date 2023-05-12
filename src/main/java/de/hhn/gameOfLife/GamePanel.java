@@ -96,10 +96,17 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public void placeFigure(int x, int y) {
+    public void placeFigure(int xp, int yp) {
+        if(figure.length == 0) return;
+        int xStart = xp - figure.length / 2;
+        int yStart = yp - figure[0].length / 2;
         for (int i = 0; i < figure.length; i++) {
             for (int j = 0; j < figure[i].length; j++) {
-                cells[(x + i) % ROWS][(y + j) % COLUMNS].setAlive(figure[i][j]);
+                int x = (xStart + i) % ROWS;
+                if (x < 0) x += ROWS;
+                int y = (yStart + j) % COLUMNS;
+                if (y < 0) y += COLUMNS;
+                cells[x][y].setAlive(figure[i][j]);
             }
         }
     }
