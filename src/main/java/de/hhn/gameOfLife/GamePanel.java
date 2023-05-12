@@ -4,22 +4,25 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
-    static int ROWS = 100;
-    static int COLUMNS = 100;
-    private final Cell[][] cells = new Cell[ROWS][COLUMNS];
-
-    private final boolean[][] lastStep = new boolean[ROWS][COLUMNS];
+    private int rows = 100;
+    private int columns = 100;
+    private final Cell[][] cells;
+    private final boolean[][] lastStep;
     private boolean mousePressed = false;
     private boolean figureMode = true;
     private boolean[][] figure = new boolean[0][0];
 
-    public GamePanel() {
-        this.setBounds(0, 0, COLUMNS * 8, ROWS * 8);
+    
+    public GamePanel(int cColums, int cRows) {
+        columns = cColums;
+        rows = cRows;
+        this.setBounds(0, 0, columns * 8, rows * 8);
         this.setPreferredSize(new Dimension(800, 800));
-        this.setLayout(new GridLayout(ROWS, COLUMNS));
-
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
+        this.setLayout(new GridLayout(rows, columns));
+        cells = new Cell[rows][columns];
+        lastStep = new boolean[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 cells[i][j] = new Cell(this, i, j);
             }
         }
@@ -28,18 +31,18 @@ public class GamePanel extends JPanel {
     public void update() {
         saveLastStep();
 
-        int[][] allNeighbours = new int[ROWS][ROWS];
+        int[][] allNeighbours = new int[rows][rows];
 
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 Cell cell = cells[i][j];
                 int neighbours = 0;
                 for (int k = -1; k <= 1; k++) {
                     for (int l = -1; l <= 1; l++) {
-                        int x = (i + k) % ROWS;
-                        if (x < 0) x += ROWS;
-                        int y = (j + l) % COLUMNS;
-                        if (y < 0) y += COLUMNS;
+                        int x = (i + k) % rows;
+                        if (x < 0) x += rows;
+                        int y = (j + l) % columns;
+                        if (y < 0) y += columns;
 
                         if (cells[x][y].isAlive()) neighbours++;
                     }
@@ -49,24 +52,24 @@ public class GamePanel extends JPanel {
             }
         }
 
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 cells[i][j].update(allNeighbours[i][j]);
             }
         }
     }
 
     private void saveLastStep() {
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 lastStep[i][j] = cells[i][j].isAlive();
             }
         }
     }
 
     public void loadLastStep() {
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 cells[i][j].setAlive(lastStep[i][j]);
             }
         }
@@ -81,16 +84,16 @@ public class GamePanel extends JPanel {
     }
 
     public void clear() {
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 cells[i][j].setAlive(false);
             }
         }
     }
 
     public void randomize() {
-        for (int i = 0; i < ROWS; i++) {
-            for (int j = 0; j < COLUMNS; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 cells[i][j].setAlive(Math.random() > 0.5);
             }
         }
@@ -102,10 +105,10 @@ public class GamePanel extends JPanel {
         int yStart = yp - figure[0].length / 2;
         for (int i = 0; i < figure.length; i++) {
             for (int j = 0; j < figure[i].length; j++) {
-                int x = (xStart + i) % ROWS;
-                if (x < 0) x += ROWS;
-                int y = (yStart + j) % COLUMNS;
-                if (y < 0) y += COLUMNS;
+                int x = (xStart + i) % rows;
+                if (x < 0) x += rows;
+                int y = (yStart + j) % columns;
+                if (y < 0) y += columns;
                 cells[x][y].setAlive(figure[i][j]);
             }
         }

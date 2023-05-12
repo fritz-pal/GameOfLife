@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class GOLWindow extends JInternalFrame {
-    GamePanel gamePanel = new GamePanel();
+    GamePanel gamePanel = new GamePanel(100,100);
     private GameThread gameThread = null;
     private int updateRate = 100;
     private ImageIcon figureImage = null;
