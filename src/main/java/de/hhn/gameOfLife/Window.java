@@ -21,7 +21,7 @@ public class Window extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
-        this.setIconImage(new ImageIcon("src/main/resources/spaceships/super_heavy_weight_spaceship.png").getImage());
+        this.setIconImage(Main.getIcon("figure.png").getImage());
 
         JMenu[] menus = {new JMenu("File"), new JMenu("Mode"), new JMenu("View"), new JMenu("Help")};
 
@@ -56,12 +56,17 @@ public class Window extends JFrame {
             place.setBackground(null);
             figure.setBackground(Color.GREEN);
         });
+        run.setIcon(Main.getIcon("run.png"));
+        paint.setIcon(Main.getIcon("paint.png"));
+        place.setIcon(Main.getIcon("place.png"));
+        figure.setIcon(Main.getIcon("figure.png"));
         menus[1].add(run);
         menus[1].add(paint);
         menus[1].add(place);
         menus[1].add(figure);
 
         JMenuItem zoomItem = new JMenuItem("Zoom: " + zoom);
+        zoomItem.setIcon(Main.getIcon("zoom.png"));
         zoomItem.addActionListener(e -> {
             JTextField textField = new JTextField();
             Object[] message = {"Zoom:", textField};
@@ -79,6 +84,7 @@ public class Window extends JFrame {
         });
         menus[2].add(zoomItem);
         JMenuItem sizeItem = new JMenuItem("Size: " + columns + " x " + rows);
+        sizeItem.setIcon(Main.getIcon("size.png"));
         sizeItem.addActionListener(e -> {
             JTextField textField1 = new JTextField();
             JTextField textField2 = new JTextField();
@@ -99,21 +105,28 @@ public class Window extends JFrame {
         });
         menus[2].add(sizeItem);
 
-
-        JMenuItem close = new JMenuItem("Exit");
+        JMenuItem close = new JMenuItem("Close");
         close.addActionListener(e -> System.exit(0));
+        close.setIcon(Main.getIcon("exit.png"));
 
         JMenuItem createWindow = new JMenuItem("New Window");
+        createWindow.setIcon(Main.getIcon("create.png"));
         createWindow.addActionListener(e -> {
             GOLWindow frame = new GOLWindow(this, columns, rows, zoom);
             desktopPane.add(frame);
         });
         menus[0].add(createWindow);
+        menus[0].addSeparator();
         menus[0].add(close);
         for (JMenu m : menus) menu.add(m);
         this.setJMenuBar(menu);
 
         desktopPane.setBackground(Color.BLUE);
+        JLabel label = new JLabel();
+        label.setSize(this.getWidth(), this.getHeight());
+        Image background = Main.getBackground();
+        if(background != null) label.setIcon(new ImageIcon(background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH)));
+        desktopPane.add(label);
         this.add(desktopPane);
 
         this.setVisible(true);

@@ -33,7 +33,6 @@ public class GameThread extends Thread {
 
     public void setUpdateRate(int updateRate) {
         this.updateRate = updateRate;
-        System.out.println(updateRate + ":" + calcSleepTime());
     }
 }
 

@@ -25,7 +25,7 @@ public class GOLWindow extends JInternalFrame {
         this.setSize(columns * zoom, rows * zoom);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.getContentPane().setPreferredSize(new Dimension(columns * zoom, rows * zoom));
-        this.setFrameIcon(new ImageIcon("src/main/resources/spaceships/super_heavy_weight_spaceship.png"));
+        this.setFrameIcon(Main.getIcon("figure.png"));
 
         gamePanel = new GamePanel(this, columns, rows);
         this.add(gamePanel, BorderLayout.CENTER);
@@ -89,6 +89,7 @@ public class GOLWindow extends JInternalFrame {
                     subMenuItem.addActionListener(e -> importFigure(sf.getPath()));
                     subMenu.add(subMenuItem);
                 }
+                if (subFiles.length >= 1) subMenu.setIcon(getFormattedIcon(subFiles[0].getPath()));
             }
             golMenus[5].add(subMenu);
         }
