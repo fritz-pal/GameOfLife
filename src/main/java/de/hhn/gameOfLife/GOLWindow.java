@@ -2,29 +2,43 @@ package de.hhn.gameOfLife;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
 
 public class GOLWindow extends JInternalFrame {
-    GamePanel gamePanel = new GamePanel(100,100);
-    private GameThread gameThread = null;
-    private int updateRate = 100;
+    private final GamePanel gamePanel;
+    private final GameThread gameThread;
+    private final Window window;
+    private final JLabel imageLabel = new JLabel();
     private ImageIcon figureImage = null;
-    JLabel imageLabel = new JLabel();
-    JMenuBar menuGolWindow = new JMenuBar();
 
-    public GOLWindow(int rows, int columns) {
+    public GOLWindow(Window window, int rows, int columns) {
         super("Game of Life", true, true, true, true);
+        this.window = window;
         this.setSize(1000, 900);
         this.setLayout(null);
+        this.setFrameIcon(new ImageIcon("src/main/resources/spaceships/super_heavy_weight_spaceship.png"));
+
+        gamePanel = new GamePanel(this, rows, columns);
         this.add(gamePanel);
-        this.setFrameIcon(new ImageIcon("src/main/resources/glider.png"));
-        JMenu[] golMenus = {new JMenu("Clear"), new JMenu("Set Speed"),new JMenu("Step"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Insert Figure")};
+
+        gameThread = new GameThread(gamePanel, 990);
+        gameThread.start();
+        this.addInternalFrameListener(new InternalFrameAdapter() {
+            @Override
+            public void internalFrameClosed(InternalFrameEvent e) {
+                gameThread.dispose();
+            }
+        });
+
+        JMenu[] golMenus = {new JMenu("Clear"), new JMenu("Set Speed"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Choose Figure")};
+        JMenuBar menuGolWindow = new JMenuBar();
         for (JMenu m : golMenus) menuGolWindow.add(m);
         this.setJMenuBar(menuGolWindow);
 
@@ -35,52 +49,10 @@ public class GOLWindow extends JInternalFrame {
             }
         });
 
-        JSlider updateRateSlider = new JSlider(1, 1000, 800);
-        updateRateSlider.setBounds(0, 800, 800, 50);
-        updateRateSlider.addChangeListener(e -> {
-            if (gameThread != null) {
-                gameThread.setUpdateRate(updateRateSlider.getValue());
-            }
-            updateRate = updateRateSlider.getValue();
-        });
-
-
+        JSlider updateRateSlider = new JSlider(1, 1000, 990);
+        updateRateSlider.setSize(800, 50);
+        updateRateSlider.addChangeListener(e -> gameThread.setUpdateRate(updateRateSlider.getValue()));
         golMenus[1].add(updateRateSlider);
-
-        golMenus[2].addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                gamePanel.update();
-
-            }
-        });
-
-        golMenus[3].addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                gamePanel.loadLastStep();
-
-            }
-        });
-
-        golMenus[4].addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                gamePanel.randomize();
-
-            }
-        });
-
-
-        JButton startButton = new JButton("Start/Stop");
-        startButton.setBounds(800, 0, 100, 50);
-        startButton.addActionListener(e -> {
-            if (gameThread == null) {
-                gameThread = new GameThread(gamePanel, updateRate);
-                gameThread.start();
-            } else {
-                gameThread.dispose();
-                gameThread = null;
-            }
-        });
-        this.add(startButton);
 
         JButton stepButton = new JButton("Step");
         stepButton.setBounds(800, 50, 100, 50);
@@ -111,7 +83,6 @@ public class GOLWindow extends JInternalFrame {
         imageLabel.setIcon(figureImage);
         this.add(imageLabel);
 
-
         importFigure("oscillators/pulsar.png");
 
         this.setVisible(true);
@@ -126,7 +97,7 @@ public class GOLWindow extends JInternalFrame {
             e.printStackTrace();
             return;
         }
-        figureImage = new ImageIcon(image.getScaledInstance(image.getWidth()*4, image.getHeight()*4, Image.SCALE_SMOOTH));
+        figureImage = new ImageIcon(image.getScaledInstance(image.getWidth() * 4, image.getHeight() * 4, Image.SCALE_SMOOTH));
         imageLabel.setIcon(figureImage);
 
         boolean[][] figure = new boolean[image.getHeight()][image.getWidth()];
@@ -136,5 +107,9 @@ public class GOLWindow extends JInternalFrame {
             }
         }
         gamePanel.setFigure(figure);
+    }
+
+    public Mode getMode() {
+        return window.getMode();
     }
 }

@@ -18,7 +18,8 @@ public class GameThread extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            window.update();
+            if (window.getMode() == Mode.RUN)
+                window.update();
         }
     }
 

@@ -39,8 +39,8 @@ public class Cell extends JPanel {
 
     private void setColor() {
 //        this.setBackground(alive ? new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)) : Color.WHITE);
-//        this.setBackground(alive ? Color.BLACK : Color.WHITE);
-        this.setBackground(alive ? Color.GREEN : Color.BLUE);
+        this.setBackground(alive ? Color.BLACK : Color.WHITE);
+        //   this.setBackground(alive ? Color.GREEN : Color.BLUE);
     }
 
     private MouseAdapter mouseListener() {
@@ -48,11 +48,11 @@ public class Cell extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 gamePanel.setMousePressed(true);
-                if (gamePanel.isFigureMode()) {
-                    gamePanel.placeFigure(x, y);
-                    return;
+                switch (gamePanel.getMode()) {
+                    case PLACE -> setAlive(!alive);
+                    case PAINT -> setAlive(true);
+                    case FIGURE -> gamePanel.placeFigure(x, y);
                 }
-                setAlive(!alive);
             }
 
             @Override
@@ -63,11 +63,7 @@ public class Cell extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (gamePanel.isMousePressed()) {
-                    if (gamePanel.isFigureMode()) {
-                        gamePanel.placeFigure(x, y);
-                        return;
-                    }
-                    setAlive(true);
+                    if (gamePanel.getMode() == Mode.PAINT) setAlive(true);
                 }
             }
         };

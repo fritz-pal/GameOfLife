@@ -4,18 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GamePanel extends JPanel {
-    private int rows = 100;
-    private int columns = 100;
     private final Cell[][] cells;
     private final boolean[][] lastStep;
+    private final GOLWindow window;
+    private final int rows;
+    private final int columns;
     private boolean mousePressed = false;
-    private boolean figureMode = true;
     private boolean[][] figure = new boolean[0][0];
 
-    
-    public GamePanel(int cColums, int cRows) {
-        columns = cColums;
-        rows = cRows;
+
+    public GamePanel(GOLWindow window, int columns, int rows) {
+        this.window = window;
+        this.columns = columns;
+        this.rows = rows;
         this.setBounds(0, 0, columns * 8, rows * 8);
         this.setPreferredSize(new Dimension(800, 800));
         this.setLayout(new GridLayout(rows, columns));
@@ -100,7 +101,7 @@ public class GamePanel extends JPanel {
     }
 
     public void placeFigure(int xp, int yp) {
-        if(figure.length == 0) return;
+        if (figure.length == 0) return;
         int xStart = xp - figure.length / 2;
         int yStart = yp - figure[0].length / 2;
         for (int i = 0; i < figure.length; i++) {
@@ -118,7 +119,7 @@ public class GamePanel extends JPanel {
         this.figure = figure;
     }
 
-    public boolean isFigureMode() {
-        return figureMode;
+    public Mode getMode() {
+        return window.getMode();
     }
 }
