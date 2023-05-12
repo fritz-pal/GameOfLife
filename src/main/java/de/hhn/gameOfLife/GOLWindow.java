@@ -25,6 +25,7 @@ public class GOLWindow extends JInternalFrame {
         this.setLayout(null);
         this.setFrameIcon(new ImageIcon("src/main/resources/spaceships/super_heavy_weight_spaceship.png"));
 
+
         gamePanel = new GamePanel(this, rows, columns);
         this.add(gamePanel);
 
@@ -36,43 +37,48 @@ public class GOLWindow extends JInternalFrame {
                 gameThread.dispose();
             }
         });
-
-        JMenu[] golMenus = {new JMenu("Clear"), new JMenu("Set Speed"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Choose Figure")};
         JMenuBar menuGolWindow = new JMenuBar();
+        JMenu[] golMenus = {new JMenu("Clear"), new JMenu("Set Speed"), new JMenu("Step"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Insert Figure")};
         for (JMenu m : golMenus) menuGolWindow.add(m);
         this.setJMenuBar(menuGolWindow);
 
         golMenus[0].addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 gamePanel.clear();
+            }
+        });
+        JSlider updateRateSlider = new JSlider(1, 1000, 800);
+        updateRateSlider.setBounds(0, 800, 800, 50);
+        updateRateSlider.addChangeListener(e -> {
+            if (gameThread != null) {
+                gameThread.setUpdateRate(updateRateSlider.getValue());
+            }
+        });
+
+
+        golMenus[1].add(updateRateSlider);
+
+        golMenus[2].addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                gamePanel.update();
 
             }
         });
 
-        JSlider updateRateSlider = new JSlider(1, 1000, 990);
-        updateRateSlider.setSize(800, 50);
-        updateRateSlider.addChangeListener(e -> gameThread.setUpdateRate(updateRateSlider.getValue()));
-        golMenus[1].add(updateRateSlider);
+        golMenus[3].addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                gamePanel.loadLastStep();
 
-        JButton stepButton = new JButton("Step");
-        stepButton.setBounds(800, 50, 100, 50);
-        stepButton.addActionListener(e -> gamePanel.update());
-        this.add(stepButton);
+            }
+        });
 
-        JButton stepBackButton = new JButton("Step Back");
-        stepBackButton.setBounds(800, 100, 100, 50);
-        stepBackButton.addActionListener(e -> gamePanel.loadLastStep());
-        this.add(stepBackButton);
+        golMenus[4].addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                gamePanel.randomize();
 
-        JButton clearButton = new JButton("Clear");
-        clearButton.setBounds(800, 150, 100, 50);
-        clearButton.addActionListener(e -> gamePanel.clear());
-        this.add(clearButton);
+            }
+        });
 
-        JButton randomButton = new JButton("Randomize");
-        randomButton.setBounds(800, 200, 100, 50);
-        randomButton.addActionListener(e -> gamePanel.randomize());
-        this.add(randomButton);
 
         JButton importButton = new JButton("Place Glider");
         importButton.setBounds(800, 250, 100, 50);
