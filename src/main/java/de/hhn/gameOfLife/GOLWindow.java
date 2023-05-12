@@ -11,6 +11,7 @@ public class GOLWindow extends JInternalFrame {
     GamePanel gamePanel = new GamePanel();
     private GameThread gameThread = null;
     private int updateRate = 100;
+    JMenuBar menuGolWindow = new JMenuBar();
 
     public GOLWindow(int rows, int columns) {
         super("Game of Life", true, true, true, true);
@@ -18,6 +19,10 @@ public class GOLWindow extends JInternalFrame {
         this.setLayout(null);
         this.add(gamePanel);
         this.setFrameIcon(new ImageIcon("src/main/resources/glider.png"));
+        JMenu[] golMenus = {new JMenu("Start"), new JMenu("Stop"), new JMenu("Clear"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Insert Figure")};
+        for (JMenu m : golMenus) menuGolWindow.add(m);
+        this.setJMenuBar(menuGolWindow);
+
 
         JButton startButton = new JButton("Start/Stop");
         startButton.setBounds(800, 0, 100, 50);
