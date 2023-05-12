@@ -46,17 +46,13 @@ public class Cell extends JPanel {
     private MouseAdapter mouseListener() {
         return new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
+                gamePanel.setMousePressed(true);
                 if (gamePanel.isFigureMode()) {
                     gamePanel.placeFigure(x, y);
                     return;
                 }
                 setAlive(!alive);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                gamePanel.setMousePressed(true);
             }
 
             @Override

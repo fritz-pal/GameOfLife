@@ -78,7 +78,7 @@ public class GOLWindow extends JInternalFrame {
         });
         this.add(updateRateSlider);
 
-        importFigure("glider.png");
+        importFigure("pulsar.png");
 
         this.setVisible(true);
     }
