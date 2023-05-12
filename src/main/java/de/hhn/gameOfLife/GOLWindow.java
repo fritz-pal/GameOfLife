@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 
 public class GOLWindow extends JInternalFrame {
     GamePanel gamePanel = new GamePanel();
@@ -23,7 +24,7 @@ public class GOLWindow extends JInternalFrame {
         this.setLayout(null);
         this.add(gamePanel);
         this.setFrameIcon(new ImageIcon("src/main/resources/glider.png"));
-        JMenu[] golMenus = {new JMenu("Clear"), new JMenu("Set Speed"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Insert Figure")};
+        JMenu[] golMenus = {new JMenu("Clear"), new JMenu("Set Speed"),new JMenu("Step"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Insert Figure")};
         for (JMenu m : golMenus) menuGolWindow.add(m);
         this.setJMenuBar(menuGolWindow);
 
@@ -43,7 +44,29 @@ public class GOLWindow extends JInternalFrame {
             updateRate = updateRateSlider.getValue();
         });
 
+
         golMenus[1].add(updateRateSlider);
+
+        golMenus[2].addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                gamePanel.update();
+
+            }
+        });
+
+        golMenus[3].addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                gamePanel.loadLastStep();
+
+            }
+        });
+
+        golMenus[4].addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                gamePanel.randomize();
+
+            }
+        });
 
 
         JButton startButton = new JButton("Start/Stop");
