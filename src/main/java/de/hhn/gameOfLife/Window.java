@@ -16,6 +16,7 @@ public class Window extends JFrame {
         this.setIconImage(new ImageIcon("src/main/resources/glider.png").getImage());
         JMenu[] menus = {new JMenu("File"), new JMenu("Mode"), new JMenu("View"), new JMenu("Help")};
 
+
         JMenuItem createWindow = new JMenuItem("New Window");
         createWindow.addActionListener(e -> {
             GOLWindow frame = new GOLWindow(100, 100);
