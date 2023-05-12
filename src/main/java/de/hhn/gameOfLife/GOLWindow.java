@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 
 public class GOLWindow extends JInternalFrame {
-    GamePanel gamePanel = new GamePanel();
+    GamePanel gamePanel = new GamePanel(100,100);
     private GameThread gameThread = null;
     private int updateRate = 100;
     private ImageIcon figureImage = null;
