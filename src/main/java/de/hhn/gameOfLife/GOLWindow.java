@@ -3,6 +3,8 @@ package de.hhn.gameOfLife;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,9 +23,27 @@ public class GOLWindow extends JInternalFrame {
         this.setLayout(null);
         this.add(gamePanel);
         this.setFrameIcon(new ImageIcon("src/main/resources/glider.png"));
-        JMenu[] golMenus = {new JMenu("Start"), new JMenu("Stop"), new JMenu("Clear"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Insert Figure")};
+        JMenu[] golMenus = {new JMenu("Clear"), new JMenu("Set Speed"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Insert Figure")};
         for (JMenu m : golMenus) menuGolWindow.add(m);
         this.setJMenuBar(menuGolWindow);
+
+        golMenus[0].addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                gamePanel.clear();
+
+            }
+        });
+
+        JSlider updateRateSlider = new JSlider(1, 1000, 800);
+        updateRateSlider.setBounds(0, 800, 800, 50);
+        updateRateSlider.addChangeListener(e -> {
+            if (gameThread != null) {
+                gameThread.setUpdateRate(updateRateSlider.getValue());
+            }
+            updateRate = updateRateSlider.getValue();
+        });
+
+        golMenus[1].add(updateRateSlider);
 
 
         JButton startButton = new JButton("Start/Stop");
@@ -61,24 +81,15 @@ public class GOLWindow extends JInternalFrame {
 
         JButton importButton = new JButton("Place Glider");
         importButton.setBounds(800, 250, 100, 50);
-        importButton.addActionListener(e -> importFigure("glider_gun.png"));
+        importButton.addActionListener(e -> importFigure("oscillators/glider_gun.png"));
         this.add(importButton);
 
         imageLabel.setBounds(800, 300, 200, 200);
         imageLabel.setIcon(figureImage);
         this.add(imageLabel);
 
-        JSlider updateRateSlider = new JSlider(1, 1000, 800);
-        updateRateSlider.setBounds(0, 800, 800, 50);
-        updateRateSlider.addChangeListener(e -> {
-            if (gameThread != null) {
-                gameThread.setUpdateRate(updateRateSlider.getValue());
-            }
-            updateRate = updateRateSlider.getValue();
-        });
-        this.add(updateRateSlider);
 
-        importFigure("pulsar.png");
+        importFigure("oscillators/pulsar.png");
 
         this.setVisible(true);
     }
