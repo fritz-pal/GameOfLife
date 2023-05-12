@@ -15,19 +15,19 @@ public class GOLWindow extends JInternalFrame {
     private final GamePanel gamePanel;
     private final GameThread gameThread;
     private final Window window;
-    private final JLabel imageLabel = new JLabel();
-    private final JPanel taskBar = new JPanel();
-    private ImageIcon figureImage = null;
+    //private final JLabel imageLabel = new JLabel();
+//    private final JPanel taskBar = new JPanel();
+//    private ImageIcon figureImage = null;
 
-    public GOLWindow(Window window, int rows, int columns) {
-        super("Game of Life", true, true, true, true);
+    public GOLWindow(Window window, int columns, int rows, int zoom) {
+        super("Game of Life", false, true, false, true);
         this.window = window;
-        this.setSize(1000, 900);
-        this.setLayout(new BorderLayout());
+        this.setSize(columns * zoom, rows * zoom);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.getContentPane().setPreferredSize(new Dimension(columns * zoom, rows * zoom));
         this.setFrameIcon(new ImageIcon("src/main/resources/spaceships/super_heavy_weight_spaceship.png"));
 
-
-        gamePanel = new GamePanel(this, rows, columns);
+        gamePanel = new GamePanel(this, columns, rows);
         this.add(gamePanel, BorderLayout.CENTER);
 
         gameThread = new GameThread(gamePanel, 500);
@@ -74,38 +74,40 @@ public class GOLWindow extends JInternalFrame {
             }
         });
 
-        String resourcePath = "src/main/resources/";
-        File[] files = new File(resourcePath + "oscillators/").listFiles();
+
+        String figuresPath = "src/main/resources/figures/";
+        File[] files = new File(figuresPath).listFiles();
+        if (files == null) throw new RuntimeException("No files found in " + figuresPath);
         for (File f : files) {
-            JMenuItem item = new JMenuItem(getFormattedName(f.getName()));
-            item.setIcon(getFormattedIcon(resourcePath + "oscillators/" + f.getName()));
-            item.addActionListener(e -> importFigure("oscillators/" + f.getName()));
-            golMenus[5].add(item);
+            if (!f.isDirectory()) continue;
+            JMenu subMenu = new JMenu(getFormattedName(f.getName()));
+            File[] subFiles = f.listFiles();
+            if (subFiles != null) {
+                for (File sf : subFiles) {
+                    JMenuItem subMenuItem = new JMenuItem(getFormattedName(sf.getName()));
+                    subMenuItem.setIcon(getFormattedIcon(sf.getPath()));
+                    subMenuItem.addActionListener(e -> importFigure(sf.getPath()));
+                    subMenu.add(subMenuItem);
+                }
+            }
+            golMenus[5].add(subMenu);
         }
-        golMenus[5].addSeparator();
-        files = new File(resourcePath + "spaceships/").listFiles();
-        for (File f : files) {
-            JMenuItem item = new JMenuItem(getFormattedName(f.getName()));
-            item.setIcon(getFormattedIcon(resourcePath + "spaceships/" + f.getName()));
-            item.addActionListener(e -> importFigure("spaceships/" + f.getName()));
-            golMenus[5].add(item);
-        }
 
-
-       // imageLabel.setBounds(800, 300, 200, 200);
-       //imageLabel.setIcon(figureImage);
-       // this.add(taskBar);
-
-        JButton importButton = new JButton("Import");
-        taskBar.add(importButton);
-        this.add(taskBar, BorderLayout.NORTH);
+        // imageLabel.setBounds(800, 300, 200, 200);
+        //imageLabel.setIcon(figureImage);
+        // this.add(taskBar);
+//
+//        JButton importButton = new JButton("Import");
+//        taskBar.add(importButton);
+//        this.add(taskBar, BorderLayout.NORTH);
 
         this.setVisible(true);
-
+        this.pack();
     }
 
     private String getFormattedName(String name) {
-        return Character.toUpperCase(name.charAt(0)) + name.substring(1, name.lastIndexOf('.')).replace('_', ' ');
+        String[] split = name.split("\\.");
+        return Character.toUpperCase(split[0].charAt(0)) + split[0].substring(1).replace('_', ' ');
     }
 
     private ImageIcon getFormattedIcon(String path) {
@@ -115,7 +117,7 @@ public class GOLWindow extends JInternalFrame {
     }
 
     private void importFigure(String path) {
-        File file = new File("src/main/resources/" + path);
+        File file = new File(path);
         BufferedImage image;
         try {
             image = ImageIO.read(file);
@@ -123,8 +125,8 @@ public class GOLWindow extends JInternalFrame {
             e.printStackTrace();
             return;
         }
-        figureImage = new ImageIcon(image.getScaledInstance(image.getWidth() * 4, image.getHeight() * 4, Image.SCALE_SMOOTH));
-        imageLabel.setIcon(figureImage);
+//        figureImage = new ImageIcon(image.getScaledInstance(image.getWidth() * 4, image.getHeight() * 4, Image.SCALE_SMOOTH));
+//        imageLabel.setIcon(figureImage);
 
         boolean[][] figure = new boolean[image.getHeight()][image.getWidth()];
         for (int x = 0; x < image.getWidth(); x++) {

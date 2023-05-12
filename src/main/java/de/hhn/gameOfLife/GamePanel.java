@@ -32,7 +32,7 @@ public class GamePanel extends JPanel {
     public void update() {
         saveLastStep();
 
-        int[][] allNeighbours = new int[rows][rows];
+        int[][] allNeighbours = new int[rows][columns];
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
