@@ -7,9 +7,12 @@ import java.awt.event.MouseEvent;
 
 public class Cell extends JPanel {
     private boolean alive;
-    GamePanel gamePanel;
+    private final GamePanel gamePanel;
+    private final int x, y;
 
-    public Cell(GamePanel gamePanel) {
+    public Cell(GamePanel gamePanel, int x, int y) {
+        this.x = x;
+        this.y = y;
         this.gamePanel = gamePanel;
         this.alive = false;
         setColor();
@@ -44,6 +47,10 @@ public class Cell extends JPanel {
         return new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(gamePanel.isFigureMode()){
+                    gamePanel.placeFigure(x, y);
+                    return;
+                }
                 setAlive(!alive);
             }
 

@@ -10,6 +10,8 @@ public class GamePanel extends JPanel {
 
     private final boolean[][] lastStep = new boolean[ROWS][COLUMNS];
     private boolean mousePressed = false;
+    private boolean figureMode = true;
+    private boolean[][] figure = new boolean[0][0];
 
     public GamePanel() {
         this.setBounds(0, 0, COLUMNS * 8, ROWS * 8);
@@ -18,7 +20,7 @@ public class GamePanel extends JPanel {
 
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
-                cells[i][j] = new Cell(this);
+                cells[i][j] = new Cell(this, i, j);
             }
         }
     }
@@ -54,7 +56,7 @@ public class GamePanel extends JPanel {
         }
     }
 
-    private void saveLastStep(){
+    private void saveLastStep() {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
                 lastStep[i][j] = cells[i][j].isAlive();
@@ -62,7 +64,7 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public void loadLastStep(){
+    public void loadLastStep() {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
                 cells[i][j].setAlive(lastStep[i][j]);
@@ -92,5 +94,21 @@ public class GamePanel extends JPanel {
                 cells[i][j].setAlive(Math.random() > 0.5);
             }
         }
+    }
+
+    public void placeFigure(int x, int y) {
+        for (int i = 0; i < figure.length; i++) {
+            for (int j = 0; j < figure[i].length; j++) {
+                cells[(x + i) % ROWS][(y + j) % COLUMNS].setAlive(figure[i][j]);
+            }
+        }
+    }
+
+    public void setFigure(boolean[][] figure) {
+        this.figure = figure;
+    }
+
+    public boolean isFigureMode() {
+        return figureMode;
     }
 }

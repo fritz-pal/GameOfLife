@@ -13,7 +13,7 @@ public class Window extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);
-        this.setIconImage(new ImageIcon("src/main/resources/icon.png").getImage());
+        this.setIconImage(new ImageIcon("src/main/resources/glider.png").getImage());
         JMenu[] menus = {new JMenu("File"), new JMenu("Mode"), new JMenu("View"), new JMenu("Help")};
 
         JMenuItem createWindow = new JMenuItem("New Window");
@@ -22,14 +22,11 @@ public class Window extends JFrame {
             desktopPane.add(frame);
         });
         menus[0].add(createWindow);
-        for(JMenu m : menus) {
-            menu.add(m);
-        }
+        for (JMenu m : menus) menu.add(m);
         this.setJMenuBar(menu);
 
         desktopPane.setBackground(Color.BLUE);
-
-        this.add(desktopPane, BorderLayout.CENTER);
+        this.add(desktopPane);
 
         this.setVisible(true);
     }
