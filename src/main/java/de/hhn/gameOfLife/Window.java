@@ -1,6 +1,9 @@
 package de.hhn.gameOfLife;
 
 import javax.swing.*;
+import javax.swing.plaf.MenuItemUI;
+import javax.swing.plaf.basic.BasicMenuItemUI;
+import javax.swing.plaf.synth.SynthMenuItemUI;
 import java.awt.*;
 
 public class Window extends JFrame {
@@ -38,6 +41,7 @@ public class Window extends JFrame {
             place.setBackground(null);
             figure.setBackground(null);
         });
+        paint.setBackground(null);
         place.addActionListener(e -> {
             mode = Mode.PLACE;
             run.setBackground(null);
@@ -45,6 +49,7 @@ public class Window extends JFrame {
             place.setBackground(Color.GREEN);
             figure.setBackground(null);
         });
+        place.setBackground(null);
         figure.addActionListener(e -> {
             mode = Mode.FIGURE;
             run.setBackground(null);
@@ -56,7 +61,7 @@ public class Window extends JFrame {
         menus[1].add(paint);
         menus[1].add(place);
         menus[1].add(figure);
-        
+
         JMenuItem close = new JMenuItem("Exit");
         close.addActionListener(e -> System.exit(0));
 

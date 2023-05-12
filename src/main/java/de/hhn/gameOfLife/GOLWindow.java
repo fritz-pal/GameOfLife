@@ -39,7 +39,7 @@ public class GOLWindow extends JInternalFrame {
             }
         });
         JMenuBar menuGolWindow = new JMenuBar();
-        JMenu[] golMenus = {new JMenu("Clear"), new JMenu("Set Speed"), new JMenu("Step"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Insert Figure")};
+        JMenu[] golMenus = {new JMenu("Clear"), new JMenu("Set Speed"), new JMenu("Step"), new JMenu("Step back"), new JMenu("Randomize"), new JMenu("Choose Figure")};
         for (JMenu m : golMenus) menuGolWindow.add(m);
         this.setJMenuBar(menuGolWindow);
 
@@ -48,16 +48,9 @@ public class GOLWindow extends JInternalFrame {
                 gamePanel.clear();
             }
         });
-        JSlider updateRateSlider = new JSlider(1, 1000, 800);
+        JSlider updateRateSlider = new JSlider(1, 1000, 990);
         updateRateSlider.setBounds(0, 800, 800, 50);
-        updateRateSlider.addChangeListener(e -> {
-            if (gameThread != null) {
-                gameThread.setUpdateRate(updateRateSlider.getValue());
-            }
-        });
-
-
-
+        updateRateSlider.addChangeListener(e -> gameThread.setUpdateRate(updateRateSlider.getValue()));
         golMenus[1].add(updateRateSlider);
 
         golMenus[2].addMouseListener(new MouseAdapter() {
@@ -81,23 +74,44 @@ public class GOLWindow extends JInternalFrame {
             }
         });
 
-
-        JButton importButton = new JButton("Place Glider");
-        importButton.setBounds(800, 250, 100, 50);
-        importButton.addActionListener(e -> importFigure("oscillators/glider_gun.png"));
+        String resourcePath = "src/main/resources/";
+        File[] files = new File(resourcePath + "oscillators/").listFiles();
+        for (File f : files) {
+            JMenuItem item = new JMenuItem(getFormattedName(f.getName()));
+            item.setIcon(getFormattedIcon(resourcePath + "oscillators/" + f.getName()));
+            item.addActionListener(e -> importFigure("oscillators/" + f.getName()));
+            golMenus[5].add(item);
+        }
+        golMenus[5].addSeparator();
+        files = new File(resourcePath + "spaceships/").listFiles();
+        for (File f : files) {
+            JMenuItem item = new JMenuItem(getFormattedName(f.getName()));
+            item.setIcon(getFormattedIcon(resourcePath + "spaceships/" + f.getName()));
+            item.addActionListener(e -> importFigure("spaceships/" + f.getName()));
+            golMenus[5].add(item);
+        }
 
 
        // imageLabel.setBounds(800, 300, 200, 200);
        //imageLabel.setIcon(figureImage);
        // this.add(taskBar);
 
-        importFigure("oscillators/pulsar.png");
-
+        JButton importButton = new JButton("Import");
         taskBar.add(importButton);
         this.add(taskBar, BorderLayout.NORTH);
 
         this.setVisible(true);
 
+    }
+
+    private String getFormattedName(String name) {
+        return Character.toUpperCase(name.charAt(0)) + name.substring(1, name.lastIndexOf('.')).replace('_', ' ');
+    }
+
+    private ImageIcon getFormattedIcon(String path) {
+        Image image = new ImageIcon(path).getImage();
+        int i = image.getWidth(null) * 20 / image.getHeight(null);
+        return new ImageIcon(image.getScaledInstance(i, 20, Image.SCALE_SMOOTH));
     }
 
     private void importFigure(String path) {
