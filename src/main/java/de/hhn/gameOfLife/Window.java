@@ -67,7 +67,7 @@ public class Window extends JFrame {
 
         JMenuItem createWindow = new JMenuItem("New Window");
         createWindow.addActionListener(e -> {
-            GOLWindow frame = new GOLWindow(this, 50, 50);
+            GOLWindow frame = new GOLWindow(this, 50, 150);
             desktopPane.add(frame);
         });
         menus[0].add(createWindow);

@@ -30,7 +30,7 @@ public class GOLWindow extends JInternalFrame {
         gamePanel = new GamePanel(this, rows, columns);
         this.add(gamePanel, BorderLayout.CENTER);
 
-        gameThread = new GameThread(gamePanel, 990);
+        gameThread = new GameThread(gamePanel, 500);
         gameThread.start();
         this.addInternalFrameListener(new InternalFrameAdapter() {
             @Override
@@ -48,7 +48,7 @@ public class GOLWindow extends JInternalFrame {
                 gamePanel.clear();
             }
         });
-        JSlider updateRateSlider = new JSlider(1, 1000, 990);
+        JSlider updateRateSlider = new JSlider(1, 1000, 500);
         updateRateSlider.setBounds(0, 800, 800, 50);
         updateRateSlider.addChangeListener(e -> gameThread.setUpdateRate(updateRateSlider.getValue()));
         golMenus[1].add(updateRateSlider);
@@ -110,8 +110,8 @@ public class GOLWindow extends JInternalFrame {
 
     private ImageIcon getFormattedIcon(String path) {
         Image image = new ImageIcon(path).getImage();
-        int i = image.getWidth(null) * 20 / image.getHeight(null);
-        return new ImageIcon(image.getScaledInstance(i, 20, Image.SCALE_SMOOTH));
+        int i = image.getWidth(null) * 40 / image.getHeight(null);
+        return new ImageIcon(image.getScaledInstance(i, 40, Image.SCALE_SMOOTH));
     }
 
     private void importFigure(String path) {

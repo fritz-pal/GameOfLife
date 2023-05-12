@@ -14,7 +14,7 @@ public class GameThread extends Thread {
     public void run() {
         while (running) {
             try {
-                Thread.sleep(1000 - updateRate);
+                Thread.sleep(calcSleepTime());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -27,8 +27,13 @@ public class GameThread extends Thread {
         running = false;
     }
 
+    private int calcSleepTime() {
+        return Math.max(1, (int) ((1000f / (0.01f * (((float) updateRate) + 92f))) - 91.575091575f));
+    }
+
     public void setUpdateRate(int updateRate) {
         this.updateRate = updateRate;
+        System.out.println(updateRate + ":" + calcSleepTime());
     }
 }
 
