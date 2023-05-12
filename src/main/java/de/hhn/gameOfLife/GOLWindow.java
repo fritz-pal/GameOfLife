@@ -16,18 +16,19 @@ public class GOLWindow extends JInternalFrame {
     private final GameThread gameThread;
     private final Window window;
     private final JLabel imageLabel = new JLabel();
+    private final JPanel taskBar = new JPanel();
     private ImageIcon figureImage = null;
 
     public GOLWindow(Window window, int rows, int columns) {
         super("Game of Life", true, true, true, true);
         this.window = window;
         this.setSize(1000, 900);
-        this.setLayout(null);
+        this.setLayout(new BorderLayout());
         this.setFrameIcon(new ImageIcon("src/main/resources/spaceships/super_heavy_weight_spaceship.png"));
 
 
         gamePanel = new GamePanel(this, rows, columns);
-        this.add(gamePanel);
+        this.add(gamePanel, BorderLayout.CENTER);
 
         gameThread = new GameThread(gamePanel, 990);
         gameThread.start();
@@ -54,6 +55,7 @@ public class GOLWindow extends JInternalFrame {
                 gameThread.setUpdateRate(updateRateSlider.getValue());
             }
         });
+
 
 
         golMenus[1].add(updateRateSlider);
@@ -83,15 +85,19 @@ public class GOLWindow extends JInternalFrame {
         JButton importButton = new JButton("Place Glider");
         importButton.setBounds(800, 250, 100, 50);
         importButton.addActionListener(e -> importFigure("oscillators/glider_gun.png"));
-        this.add(importButton);
 
-        imageLabel.setBounds(800, 300, 200, 200);
-        imageLabel.setIcon(figureImage);
-        this.add(imageLabel);
+
+       // imageLabel.setBounds(800, 300, 200, 200);
+       //imageLabel.setIcon(figureImage);
+       // this.add(taskBar);
 
         importFigure("oscillators/pulsar.png");
 
+        taskBar.add(importButton);
+        this.add(taskBar, BorderLayout.NORTH);
+
         this.setVisible(true);
+
     }
 
     private void importFigure(String path) {
