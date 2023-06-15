@@ -41,8 +41,11 @@ public class GOLWindow extends JInternalFrame {
 
         JMenuItem[] modifyItems = {new JMenuItem("Clear"), new JMenuItem("Randomize"), new JMenuItem("Fill")};
         modifyItems[0].addActionListener(e -> gamePanel.clear());
+        modifyItems[0].setIcon(Main.getIcon("clear.png"));
         modifyItems[1].addActionListener(e -> gamePanel.randomize());
+        modifyItems[1].setIcon(Main.getIcon("random.png"));
         modifyItems[2].addActionListener(e -> gamePanel.fill());
+        modifyItems[2].setIcon(Main.getIcon("fill.png"));
         for (JMenuItem m : modifyItems) golMenus[0].add(m);
 
         JSlider updateRateSlider = new JSlider(1, 1000, 500);
