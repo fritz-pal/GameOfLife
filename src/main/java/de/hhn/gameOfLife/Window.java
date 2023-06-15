@@ -38,33 +38,33 @@ public class Window extends JFrame {
 
         run.addActionListener(e -> {
             mode = Mode.RUN;
-            run.setIcon(Main.getIcon("run.png"));
+            run.setIcon(Main.getIcon("selected.png"));
             paint.setIcon(null);
             place.setIcon(null);
             figure.setIcon(null);
         });
         paint.addActionListener(e -> {
             mode = Mode.PAINT;
-            paint.setIcon(Main.getIcon("run.png"));
+            paint.setIcon(Main.getIcon("selected.png"));
             run.setIcon(null);
             place.setIcon(null);
             figure.setIcon(null);
         });
         place.addActionListener(e -> {
             mode = Mode.PLACE;
-            place.setIcon(Main.getIcon("run.png"));
+            place.setIcon(Main.getIcon("selected.png"));
             paint.setIcon(null);
             run.setIcon(null);
             figure.setIcon(null);
         });
         figure.addActionListener(e -> {
             mode = Mode.FIGURE;
-            figure.setIcon(Main.getIcon("run.png"));
+            figure.setIcon(Main.getIcon("selected.png"));
             paint.setIcon(null);
             place.setIcon(null);
             run.setIcon(null);
         });
-        run.setIcon(Main.getIcon("run.png"));
+        run.setIcon(Main.getIcon("selected.png"));
         menus[1].add(run);
         menus[1].add(paint);
         menus[1].add(place);
