@@ -10,16 +10,19 @@ public class GamePanel extends JPanel {
     private final int rows;
     private final int columns;
     private boolean mousePressed = false;
-    private boolean[][] figure = new boolean[0][0];
+    private final Color deadColor;
+    private final Color aliveColor;
 
-
-    public GamePanel(GOLWindow window, int columns, int rows) {
+    public GamePanel(GOLWindow window, int columns, int rows, Color deadColor, Color aliveColor) {
         this.window = window;
         this.columns = columns;
         this.rows = rows;
+        this.deadColor = deadColor;
+        this.aliveColor = aliveColor;
         this.setBounds(0, 0, columns * 8, rows * 8);
         this.setPreferredSize(new Dimension(800, 800));
         this.setLayout(new GridLayout(rows, columns));
+        this.setFocusable(false);
         cells = new Cell[rows][columns];
         lastStep = new boolean[rows][columns];
         for (int i = 0; i < rows; i++) {
@@ -87,7 +90,15 @@ public class GamePanel extends JPanel {
     public void clear() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                cells[i][j].setAlive(false);
+                if(cells[i][j].isAlive()) cells[i][j].setAlive(false);
+            }
+        }
+    }
+
+    public void fill() {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if(!cells[i][j].isAlive()) cells[i][j].setAlive(true);
             }
         }
     }
@@ -95,12 +106,14 @@ public class GamePanel extends JPanel {
     public void randomize() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                cells[i][j].setAlive(Math.random() > 0.5);
+                boolean alive = Math.random() > 0.5;
+                if(cells[i][j].isAlive() != alive) cells[i][j].setAlive(alive);
             }
         }
     }
 
     public void placeFigure(int xp, int yp) {
+        boolean[][] figure = window.getFigure();
         if (figure.length == 0) return;
         int xStart = xp - figure.length / 2;
         int yStart = yp - figure[0].length / 2;
@@ -115,11 +128,15 @@ public class GamePanel extends JPanel {
         }
     }
 
-    public void setFigure(boolean[][] figure) {
-        this.figure = figure;
-    }
-
     public Mode getMode() {
         return window.getMode();
+    }
+
+    public Color getDeadColor() {
+        return deadColor;
+    }
+
+    public Color getAliveColor() {
+        return aliveColor;
     }
 }

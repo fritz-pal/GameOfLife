@@ -1,7 +1,6 @@
 package de.hhn.gameOfLife;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -16,6 +15,7 @@ public class Cell extends JPanel {
         this.gamePanel = gamePanel;
         this.alive = false;
         setColor();
+        this.setFocusable(false);
         this.addMouseListener(mouseListener());
         this.gamePanel.add(this);
     }
@@ -38,7 +38,7 @@ public class Cell extends JPanel {
     }
 
     private void setColor() {
-        this.setBackground(!alive ? Color.BLACK : Color.WHITE);
+        this.setBackground(alive ? gamePanel.getAliveColor() : gamePanel.getDeadColor());
     }
 
     private MouseAdapter mouseListener() {
