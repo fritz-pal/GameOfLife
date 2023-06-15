@@ -3,6 +3,9 @@ package de.hhn.gameOfLife;
 import javax.swing.*;
 import java.awt.*;
 
+//TODO add color chooser to menu
+//TODO change menu bar in frames to be more organized
+
 public class Window extends JFrame {
     private final JMenuItem run = new JMenuItem("Run");
     private final JMenuItem paint = new JMenuItem("Paint");
@@ -74,9 +77,7 @@ public class Window extends JFrame {
             if (option == JOptionPane.OK_OPTION) {
                 String text = textField.getText();
                 try {
-                    int number = Integer.parseInt(text);
-//                    if (number >= 1 && number <= 20) zoom = number;
-                    zoom = number;
+                    zoom = Integer.parseInt(text);
                     zoomItem.setText("Zoom: " + zoom);
                 } catch (NumberFormatException ignored) {
                 }
@@ -113,7 +114,7 @@ public class Window extends JFrame {
         createWindow.setIcon(Main.getIcon("create.png"));
         createWindow.addActionListener(e -> {
             GOLWindow frame = new GOLWindow(this, columns, rows, zoom);
-            desktopPane.add(frame);
+            desktopPane.add(frame, 1);
         });
         menus[0].add(createWindow);
         menus[0].addSeparator();
@@ -121,13 +122,10 @@ public class Window extends JFrame {
         for (JMenu m : menus) menu.add(m);
         this.setJMenuBar(menu);
 
-        desktopPane.setBackground(Color.BLUE);
+        desktopPane.setBackground(Color.LIGHT_GRAY);
         JLabel label = new JLabel();
         label.setSize(this.getWidth(), this.getHeight());
-        Image background = Main.getBackground();
-        if(background != null) label.setIcon(new ImageIcon(background.getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_SMOOTH)));
-        desktopPane.add(label);
-        this.add(desktopPane);
+        this.add(desktopPane, 0);
 
         this.setVisible(true);
     }

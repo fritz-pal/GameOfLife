@@ -38,9 +38,7 @@ public class Cell extends JPanel {
     }
 
     private void setColor() {
-//        this.setBackground(alive ? new Color((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)) : Color.WHITE);
-        this.setBackground(alive ? Color.BLACK : Color.WHITE);
-        //   this.setBackground(alive ? Color.GREEN : Color.BLUE);
+        this.setBackground(!alive ? Color.BLACK : Color.WHITE);
     }
 
     private MouseAdapter mouseListener() {
