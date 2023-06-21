@@ -3,6 +3,14 @@ package de.hhn.gameOfLife;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Erstellen Sie das GUI-Programm GameOfLife als
+ * eine spezielle Implementierung des
+ * Spiels „Game of Life“ von Conway sein.
+ *
+ * @author Dennis Mayer, Lukas Vier, Felix Marzioch, Henri Staudenrausch
+ * */
+
 public class Main {
     public static void main(String[] args) {
         try {

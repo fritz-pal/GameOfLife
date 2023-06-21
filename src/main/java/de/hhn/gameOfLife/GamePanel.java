@@ -3,6 +3,13 @@ package de.hhn.gameOfLife;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel für das Spielfeld. Erstellt die Zellen und verwaltet die Logik des Spiels.
+ * Die Update-Methode lässt das Spiel eine Generation weiterlaufen.
+ *
+ * @author Henri Staudenrausch
+ * */
+
 public class GamePanel extends JPanel {
     private final Cell[][] cells;
     private final boolean[][] lastStep;

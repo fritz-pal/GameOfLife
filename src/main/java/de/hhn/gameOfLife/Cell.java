@@ -4,6 +4,12 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Hilfsklasse für die Zellen des Spielfelds. Prüft auf Mausklicks und ändert die Farbe der Zelle.
+ *
+ * @author Dennis Mayer
+ * */
+
 public class Cell extends JPanel {
     private final GamePanel gamePanel;
     private final int x, y;

@@ -1,5 +1,11 @@
 package de.hhn.gameOfLife;
 
+/**
+ * Thread zum automatischen Updaten der GamePanels, wenn der Modus auf RUN steht.
+ *
+ * @author Lukas Vier
+ * */
+
 public class GameThread extends Thread {
     private final GamePanel window;
     private boolean running = true;

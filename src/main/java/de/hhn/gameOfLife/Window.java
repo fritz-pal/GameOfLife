@@ -9,8 +9,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-//TODO add color chooser to menu
-//TODO change menu bar in frames to be more organized
+/**
+ * Klasse der DesktopPane, die alle internal Frames beinhaltet.
+ * Hier kann der Modus gesetzt werden und die Einstellungen der Fenster geändert werden.
+ *
+ * @author Felix Marzioch, Henri Staundenrausch
+ * */
 
 public class Window extends JFrame {
     private final JMenuItem run = new JMenuItem("Run");

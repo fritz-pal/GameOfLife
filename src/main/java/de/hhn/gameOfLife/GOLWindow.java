@@ -8,6 +8,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * Erstellen Sie das GUI-Programm GameOfLife als
+ * eine spezielle Implementierung des
+ * Spiels „Game of Life“ von Conway sein.
+ *
+ * @author Lukas Vier, Dennis Mayer
+ * */
+
 public class GOLWindow extends JInternalFrame {
     private final GamePanel gamePanel;
     private final GameThread gameThread;
