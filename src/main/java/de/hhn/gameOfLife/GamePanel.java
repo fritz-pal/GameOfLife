@@ -27,7 +27,6 @@ public class GamePanel extends JPanel {
         this.deadColor = deadColor;
         this.aliveColor = aliveColor;
         this.setBounds(0, 0, columns * 8, rows * 8);
-        this.setPreferredSize(new Dimension(800, 800));
         this.setLayout(new GridLayout(rows, columns));
         this.setFocusable(false);
         cells = new Cell[rows][columns];

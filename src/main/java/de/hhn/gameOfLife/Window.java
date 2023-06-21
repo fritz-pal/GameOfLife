@@ -23,8 +23,8 @@ public class Window extends JFrame {
     private final JMenuItem place = new JMenuItem("Place");
     private final JDesktopPane desktopPane = new JDesktopPane();
     private Mode mode = Mode.RUN;
-    private Color deadColor = Color.BLACK;
-    private Color aliveColor = Color.WHITE;
+    private Color deadColor = Color.WHITE;
+    private Color aliveColor = Color.BLACK;
     private int columns = 100;
     private int rows = 100;
     private int zoom = 8;
