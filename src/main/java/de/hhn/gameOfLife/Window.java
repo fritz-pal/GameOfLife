@@ -143,7 +143,7 @@ public class Window extends JFrame {
                 }
             });
 
-            Object[] message = {"Ded Color:", deadButton, "Alive Color:", aliveButton};
+            Object[] message = {"Dead Color:", deadButton, "Alive Color:", aliveButton};
             int option = JOptionPane.showConfirmDialog(this, message, "Choose the desired colors", JOptionPane.OK_CANCEL_OPTION);
             if (option == JOptionPane.OK_OPTION) {
                 deadColor = deadButton.getBackground();
